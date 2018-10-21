@@ -43,7 +43,7 @@ def extractParameters(datab):
 	parameterList=[str(newfilenamepath[0]),str(newfilenamepath[1]),extensionstr,filenamestr]
 	paramlist=[struct.pack('%ss' %len(element),str(element)) for element in parameterList]
 
-	print("Filename: "+str(filename)+" ChunkID: "+str(chunkID))
+	#print("Filename: "+str(filename)+" ChunkID: "+str(chunkID))
 	#print("newfilenamepath: "+newfilenamepath[0])
 	#print("Directory path: "+newfilenamepath[1])
 	if(os.path.exists(newfilenamepath[0])):
@@ -68,17 +68,20 @@ def checkAllFilesPresent(dirpath,maxchunksize,extension,filename):
 	outputfile=dirpath+'/'+filename+'.'+extension
 	for x in range (maxchunksize):
 		filepath=dirpath+'/'+str(x+1)+'.'+extension
-		print("Filepath: "+filepath)
 		if(os.path.exists(filepath)==False):
 			return
+		else:
+			print("Filepath exists! : "+filepath)
 
 	with open(outputfile,'w') as outfile:
 		for y in range (maxchunksize):
-			filepath=dirpath+'/'+str(y+1)+'.'+extension
-			with open(filepath,'r') as infile:
+			filepathnew=dirpath+'/'+str(y+1)+'.'+extension
+			print("filepathnew: "+filepathnew)
+			with open(filepathnew,'r') as infile:
 				for line in infile:
 					outfile.write(line)
-			os.remove(filepath)
+					#print(line)
+			os.remove(filepathnew)
 
 	return 
 
@@ -96,7 +99,7 @@ def downloadFileFromPeer():
 	port = 6001
 	s.connect((host, port))
 
-	data="Hi Jing Rui, I am expecting your file!"
+	data="sample2.txt/4"
 	datab=data.encode('utf-8')
 	s.send(datab)
 	count=0
@@ -112,10 +115,12 @@ def downloadFileFromPeer():
 			f.write(l)
 		if(l.decode('utf-8')==""):
 			break
-		
+	
+	f.close()	
 	checkAllFilesPresent(paramlist[1],hardcodedMaxChunkSize,paramlist[2],paramlist[3])
 
-	f.close()
+	
 	s.close()
+
 
 downloadFileFromPeer()
