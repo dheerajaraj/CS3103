@@ -240,7 +240,7 @@ if __name__ == '__main__':
             
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             port=6000
-            host = "172.25.104.202"
+            host = "172.17.161.106"
             s.connect((host, port))
             data="1"
             datab=data.encode('utf-8')
